@@ -54,7 +54,6 @@ class ChauffeurController extends Controller
         if ($searchValue !== '') {
             $query->where(function ($builder) use ($searchValue) {
                 $builder->where('name', 'like', "%{$searchValue}%")
-                    ->orWhere('slug', 'like', "%{$searchValue}%")
                     ->orWhere('contact_number', 'like', "%{$searchValue}%")
                     ->orWhere('availability_status', 'like', "%{$searchValue}%");
             });

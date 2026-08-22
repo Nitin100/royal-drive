@@ -15,6 +15,9 @@
                     <table id="bookingsTable" class="min-w-full divide-y divide-gray-200 text-sm dark:divide-gray-700">
                         <thead>
                             <tr class="text-left text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                                <th class="px-4 py-3">Name</th>
+                                <th class="px-4 py-3">Email</th>
+                                <th class="px-4 py-3">Contact</th>
                                 <th class="px-4 py-3">Pickup</th>
                                 <th class="px-4 py-3">Drop-off</th>
                                 <th class="px-4 py-3">Date</th>
@@ -51,9 +54,12 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('admin.bookings.index') }}',
-                order: [[2, 'desc']],
+                order: [[5, 'desc']],
                 pageLength: 10,
                 columns: [
+                    { data: 'name', name: 'name' },
+                    { data: 'email', name: 'email' },
+                    { data: 'contact', name: 'contact' },
                     { data: 'pickup_location', name: 'pickup_location', orderable: false },
                     { data: 'dropoff_location', name: 'dropoff_location', orderable: false },
                     { data: 'pickup_date', name: 'pickup_date' },

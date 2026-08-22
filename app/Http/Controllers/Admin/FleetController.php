@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreFleetRequest;
 use App\Http\Requests\UpdateFleetRequest;
+use App\Models\Amenity;
 use App\Models\Fleet;
+use App\Models\Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -117,6 +119,8 @@ class FleetController extends Controller
         return view('admin.fleets.create', [
             'categories' => self::CATEGORIES,
             'availabilityStatuses' => self::AVAILABILITY_STATUSES,
+            'serviceOptions' => Service::query()->orderBy('title')->pluck('title', 'id')->all(),
+            'amenities' => Amenity::query()->orderBy('name')->get(),
         ]);
     }
 
@@ -124,18 +128,21 @@ class FleetController extends Controller
     {
         $fleet = Fleet::create($this->preparePayload($request->validated(), $request->file('banner_image')));
         $this->syncGallery($fleet, $request->file('gallery_images', []));
+        $this->syncAmenities($fleet, $request->input('amenities', []));
 
         return redirect()->route('admin.fleets.index')->with('status', 'Fleet created successfully.');
     }
 
     public function edit(Fleet $fleet): View
     {
-        $fleet->load('images');
+        $fleet->load(['images', 'amenities']);
 
         return view('admin.fleets.edit', [
             'fleet' => $fleet,
             'categories' => self::CATEGORIES,
             'availabilityStatuses' => self::AVAILABILITY_STATUSES,
+            'serviceOptions' => Service::query()->orderBy('title')->pluck('title', 'id')->all(),
+            'amenities' => Amenity::query()->orderBy('name')->get(),
         ]);
     }
 
@@ -172,6 +179,7 @@ class FleetController extends Controller
 
         $fleet->update($validated);
         $this->syncGallery($fleet, $request->file('gallery_images', []));
+        $this->syncAmenities($fleet, $request->input('amenities', []));
 
         return redirect()->route('admin.fleets.index')->with('status', 'Fleet updated successfully.');
     }
@@ -216,6 +224,12 @@ class FleetController extends Controller
                 'sort_order' => $index,
             ]);
         }
+    }
+
+    private function syncAmenities(Fleet $fleet, array $amenityIds): void
+    {
+        $ids = array_values(array_map('intval', $amenityIds));
+        $fleet->amenities()->sync($ids);
     }
 
     private function normalizeSlug(?string $slug, string $fallbackTitle): string

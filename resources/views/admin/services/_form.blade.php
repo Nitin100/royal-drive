@@ -63,43 +63,6 @@
         @error('description')<p class="mt-1 text-sm text-rose-600">{{ $message }}</p>@enderror
     </div>
 
-    <div class="rounded-xl border border-gray-200 bg-gray-50 p-5 dark:border-gray-700 dark:bg-gray-900/40">
-        <div class="flex items-center justify-between gap-3">
-            <div>
-                <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">Pricing Configuration</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Build service plans with names, prices, and feature lists.</p>
-            </div>
-            <button type="button" class="rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white dark:bg-gray-100 dark:text-gray-900" @click="addPlan()">Add Plan</button>
-        </div>
-
-        <input type="hidden" name="pricing_config" :value="serializedPlans">
-
-        <div class="mt-4 space-y-4">
-            <template x-for="(plan, index) in plans" :key="index">
-                <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                    <div class="grid gap-4 md:grid-cols-3">
-                        <div>
-                            <label class="mb-1 block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Plan Name</label>
-                            <input type="text" x-model="plan.name" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
-                        </div>
-                        <div>
-                            <label class="mb-1 block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Price</label>
-                            <input type="text" x-model="plan.price" placeholder="$99 / month" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
-                        </div>
-                        <div class="flex items-end justify-end">
-                            <button type="button" class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600" @click="removePlan(index)">Remove</button>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <label class="mb-1 block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Features</label>
-                        <textarea x-model="plan.featuresText" rows="3" placeholder="One feature per line" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"></textarea>
-                    </div>
-                </div>
-            </template>
-        </div>
-    </div>
-
     <div>
         <label for="gallery_images" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">Service Image Gallery</label>
         <input id="gallery_images" name="gallery_images[]" type="file" accept="image/png,image/jpeg,image/webp" multiple class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-1.5 file:text-xs file:font-semibold focus:border-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:file:bg-gray-700" />

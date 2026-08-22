@@ -51,9 +51,9 @@ class BookingController extends Controller
         $start = max(0, (int) $request->input('start', 0));
         $length = (int) $request->input('length', 10);
         $searchValue = trim((string) $request->input('search.value', ''));
-        $orderColumnIndex = (int) $request->input('order.0.column', 2);
+        $orderColumnIndex = (int) $request->input('order.0.column', 5);
         $orderDirection = strtolower((string) $request->input('order.0.dir', 'desc')) === 'asc' ? 'asc' : 'desc';
-        $columns = ['pickup_date', 'pickup_time', 'status', 'flight_number', null, null, null, null, null, null, null];
+        $columns = ['name', 'email', 'contact', 'pickup_date', 'pickup_time', 'status', 'flight_number', null, null, null, null, null];
         $orderColumn = $columns[$orderColumnIndex] ?? 'pickup_date';
 
         $query = Booking::query()->with(['pickupLocation:id,name', 'dropoffLocation:id,name', 'fleet:id,name', 'service:id,title']);
@@ -61,16 +61,19 @@ class BookingController extends Controller
 
         if ($searchValue !== '') {
             $query->where(function ($builder) use ($searchValue) {
-                $builder->whereHas('pickupLocation', function ($locationQuery) use ($searchValue) {
-                    $locationQuery->where('name', 'like', "%{$searchValue}%");
-                })->orWhereHas('dropoffLocation', function ($locationQuery) use ($searchValue) {
-                    $locationQuery->where('name', 'like', "%{$searchValue}%");
-                })->orWhereHas('fleet', function ($fleetQuery) use ($searchValue) {
-                    $fleetQuery->where('name', 'like', "%{$searchValue}%");
-                })->orWhereHas('service', function ($serviceQuery) use ($searchValue) {
-                    $serviceQuery->where('title', 'like', "%{$searchValue}%");
-                })->orWhere('status', 'like', "%{$searchValue}%")
-                ->orWhere('flight_number', 'like', "%{$searchValue}%");
+                $builder->where('name', 'like', "%{$searchValue}%")
+                    ->orWhere('email', 'like', "%{$searchValue}%")
+                    ->orWhere('contact', 'like', "%{$searchValue}%")
+                    ->orWhereHas('pickupLocation', function ($locationQuery) use ($searchValue) {
+                        $locationQuery->where('name', 'like', "%{$searchValue}%");
+                    })->orWhereHas('dropoffLocation', function ($locationQuery) use ($searchValue) {
+                        $locationQuery->where('name', 'like', "%{$searchValue}%");
+                    })->orWhereHas('fleet', function ($fleetQuery) use ($searchValue) {
+                        $fleetQuery->where('name', 'like', "%{$searchValue}%");
+                    })->orWhereHas('service', function ($serviceQuery) use ($searchValue) {
+                        $serviceQuery->where('title', 'like', "%{$searchValue}%");
+                    })->orWhere('status', 'like', "%{$searchValue}%")
+                    ->orWhere('flight_number', 'like', "%{$searchValue}%");
             });
         }
 
@@ -99,6 +102,9 @@ class BookingController extends Controller
             };
 
             return [
+                'name' => e($booking->name ?: '-'),
+                'email' => e($booking->email ?: '-'),
+                'contact' => e($booking->contact ?: '-'),
                 'pickup_location' => e($booking->pickupLocation?->name ?? '-'),
                 'dropoff_location' => e($booking->dropoffLocation?->name ?? '-'),
                 'pickup_date' => e(optional($booking->pickup_date)->format('d M Y')),

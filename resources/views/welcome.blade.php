@@ -1,3 +1,8 @@
+@php
+    $promoPopup = \App\Models\PromotionPopup::query()->active()->latest()->first();
+    $sliders = \App\Models\Slider::query()->active()->latest()->get();
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -47,6 +52,60 @@
                 </nav>
             @endif
         </header>
+        @if($sliders->isNotEmpty())
+            <div class="w-full max-w-6xl px-4 pt-4 lg:px-6">
+                <div class="space-y-4">
+                    @foreach($sliders as $slider)
+                        <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+                            <div class="flex flex-col md:flex-row">
+                                @if($slider->image_path)
+                                    <img src="{{ Storage::disk('public')->url($slider->image_path) }}" alt="{{ $slider->title }}" class="h-64 w-full object-cover md:w-2/5">
+                                @endif
+                                <div class="flex flex-1 flex-col justify-center p-6 md:p-8">
+                                    @if($slider->subtitle)
+                                        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-indigo-600">{{ $slider->subtitle }}</p>
+                                    @endif
+                                    <h2 class="mt-3 text-3xl font-bold text-gray-900">{{ $slider->title }}</h2>
+                                    @if($slider->description)
+                                        <p class="mt-3 max-w-xl text-sm leading-6 text-gray-600">{{ $slider->description }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        @if($promoPopup)
+            <div class="w-full max-w-5xl px-4 pt-4 lg:px-6">
+                <div class="overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-r from-amber-50 via-white to-orange-50 shadow-sm">
+                    <div class="flex flex-col gap-5 p-5 md:flex-row md:items-center md:justify-between md:p-6">
+                        <div class="flex items-start gap-4">
+                            @if($promoPopup->image_path)
+                                <img src="{{ Storage::disk('public')->url($promoPopup->image_path) }}" alt="{{ $promoPopup->title }}" class="h-20 w-20 rounded-xl object-cover shadow-sm" />
+                            @endif
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-amber-700">Special Offer</p>
+                                <h2 class="mt-1 text-2xl font-bold text-gray-900">{{ $promoPopup->title }}</h2>
+                                @if($promoPopup->subtitle)
+                                    <p class="mt-1 text-sm text-gray-600">{{ $promoPopup->subtitle }}</p>
+                                @endif
+                                @if($promoPopup->body)
+                                    <p class="mt-2 max-w-2xl text-sm text-gray-700">{{ $promoPopup->body }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        @if($promoPopup->button_label)
+                            <a href="{{ $promoPopup->button_url ?: '#' }}" class="inline-flex items-center justify-center rounded-lg bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-700">
+                                {{ $promoPopup->button_label }}
+                            </a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="flex items-center justify-center w-full transition-opacity opacity-100 duration-750 lg:grow starting:opacity-0">
             <main class="flex max-w-[335px] w-full flex-col-reverse lg:max-w-4xl lg:flex-row">
                 <div class="text-[13px] leading-[20px] flex-1 p-6 pb-6 lg:p-20 lg:pb-10 bg-white dark:bg-[#161615] dark:text-[#EDEDEC] shadow-[inset_0px_0px_0px_1px_rgba(26,26,0,0.16)] dark:shadow-[inset_0px_0px_0px_1px_#fffaed2d] rounded-bl-lg rounded-br-lg lg:rounded-tl-lg lg:rounded-br-none">

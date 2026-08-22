@@ -43,7 +43,12 @@ class BookingSeeder extends Seeder
 
             $isAirportTransfer = $pickupLocation->type === 'airport' || $dropoffLocation->type === 'airport';
 
+            $name = fake()->name();
+
             Booking::create([
+                'name' => $name,
+                'email' => fake()->safeEmail(),
+                'contact' => fake()->phoneNumber(),
                 'pickup_location_id' => $pickupLocation->id,
                 'dropoff_location_id' => $dropoffLocation->id,
                 'pickup_date' => fake()->dateTimeBetween('now', '+45 days')->format('Y-m-d'),

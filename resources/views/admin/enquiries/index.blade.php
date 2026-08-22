@@ -19,6 +19,7 @@
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Phone</th>
                                 <th class="px-4 py-3">Subject</th>
+                                <th class="px-4 py-3">Source</th>
                                 <th class="px-4 py-3">Status</th>
                                 <th class="px-4 py-3">Received</th>
                                 <th class="px-4 py-3">Message</th>
@@ -38,19 +39,20 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('admin.enquiries.index') }}',
-                order: [[5, 'desc']],
+                order: [[6, 'desc']],
                 columns: [
                     { data: 'name', name: 'name' },
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone' },
                     { data: 'subject', name: 'subject' },
+                    { data: 'source', name: 'source' },
                     { data: 'status', name: 'status' },
                     { data: 'received_at', name: 'received_at' },
                     { data: 'message', name: 'message' },
                 ],
                 columnDefs: [
                     {
-                        targets: [4],
+                        targets: [5],
                         orderable: true,
                         searchable: true,
                     }

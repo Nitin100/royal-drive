@@ -67,7 +67,7 @@
                type="file"
                accept="image/png,image/jpeg,image/webp"
                class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm file:mr-3 file:rounded-md file:border-0 file:bg-gray-100 file:px-3 file:py-1.5 file:text-xs file:font-semibold focus:border-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:file:bg-gray-700" />
-        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Max 2MB. JPG, PNG, or WEBP.</p>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Recommended size: 1600 x 600 px. Max 2MB. JPG, PNG, or WEBP.</p>
         @error('banner_image')
             <p class="mt-1 text-sm text-rose-600">{{ $message }}</p>
         @enderror

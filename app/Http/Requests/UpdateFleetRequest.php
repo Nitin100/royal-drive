@@ -40,6 +40,8 @@ class UpdateFleetRequest extends FormRequest
             'delete_gallery_images.*' => ['integer'],
             'description' => ['nullable', 'string'],
             'pricing_config' => ['nullable', 'string'],
+            'amenities' => ['nullable', 'array'],
+            'amenities.*' => ['integer', 'exists:amenities,id'],
         ];
     }
 }

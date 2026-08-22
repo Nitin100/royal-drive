@@ -28,7 +28,7 @@ class EnquiryController extends Controller
         $orderColumnIndex = (int) $request->input('order.0.column', 5);
         $orderDirection = strtolower((string) $request->input('order.0.dir', 'desc')) === 'asc' ? 'asc' : 'desc';
 
-        $columns = ['name', 'email', 'phone', 'subject', 'status', 'created_at'];
+        $columns = ['name', 'email', 'phone', 'subject', 'source', 'status', 'created_at'];
         $orderColumn = $columns[$orderColumnIndex] ?? 'created_at';
 
         $query = Enquiry::query();
@@ -40,6 +40,7 @@ class EnquiryController extends Controller
                     ->orWhere('email', 'like', "%{$searchValue}%")
                     ->orWhere('phone', 'like', "%{$searchValue}%")
                     ->orWhere('subject', 'like', "%{$searchValue}%")
+                    ->orWhere('source', 'like', "%{$searchValue}%")
                     ->orWhere('message', 'like', "%{$searchValue}%")
                     ->orWhere('status', 'like', "%{$searchValue}%");
             });
@@ -53,11 +54,14 @@ class EnquiryController extends Controller
             ->get();
 
         $data = $enquiries->map(function (Enquiry $enquiry) {
+            $sourceText = $enquiry->source ? ucwords(str_replace(['-', '_'], ' ', $enquiry->source)) : 'Unknown';
+
             return [
                 'name' => e($enquiry->name),
                 'email' => e($enquiry->email),
                 'phone' => e($enquiry->phone ?: '-'),
                 'subject' => e($enquiry->subject ?: '-'),
+                'source' => e($sourceText),
                 'status' => '<span class="rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-700 dark:bg-gray-700 dark:text-gray-200">' . e(ucfirst($enquiry->status)) . '</span>',
                 'received_at' => e($enquiry->created_at?->diffForHumans() ?? '-'),
                 'message' => e($enquiry->message),

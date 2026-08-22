@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminPageController;
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogTagController;
@@ -9,7 +10,9 @@ use App\Http\Controllers\Admin\ChauffeurController;
 use App\Http\Controllers\Admin\EnquiryController;
 use App\Http\Controllers\Admin\FleetController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\PromotionPopupController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\TourCategoryController;
 use App\Http\Controllers\Admin\TourController;
 use App\Http\Controllers\Admin\TourTagController;
@@ -69,12 +72,21 @@ Route::middleware('auth')->group(function () {
     Route::resource('admin/fleets', FleetController::class)
         ->except(['show'])
         ->names('admin.fleets');
+    Route::resource('admin/amenities', AmenityController::class)
+        ->except(['show'])
+        ->names('admin.amenities');
     Route::resource('admin/services', ServiceController::class)
         ->except(['show'])
         ->names('admin.services');
     Route::resource('admin/locations', LocationController::class)
         ->except(['show'])
         ->names('admin.locations');
+    Route::resource('admin/sliders', SliderController::class)
+        ->except(['show'])
+        ->names('admin.sliders');
+    Route::resource('admin/promotion-popups', PromotionPopupController::class)
+        ->except(['show'])
+        ->names('admin.promotion-popups');
     Route::resource('admin/pages', CmsPageController::class)
         ->except(['show'])
         ->names('admin.pages');

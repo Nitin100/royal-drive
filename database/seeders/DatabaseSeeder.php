@@ -19,10 +19,12 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             PageSeeder::class,
             ServiceSeeder::class,
+            AmenitySeeder::class,
             FleetSeeder::class,
             ChauffeurSeeder::class,
             TourSeeder::class,
             BookingSeeder::class,
+            EnquirySeeder::class,
         ]);
 
         User::firstOrCreate([

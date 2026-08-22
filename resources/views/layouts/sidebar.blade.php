@@ -4,7 +4,6 @@
             'title' => 'Core',
             'items' => [
                 ['label' => 'Dashboard', 'route' => 'dashboard', 'active' => ['dashboard'], 'icon' => 'dashboard'],
-                ['label' => 'Users', 'route' => 'admin.users', 'active' => ['admin.users'], 'icon' => 'users'],
                 ['label' => 'Enquiries', 'route' => 'admin.enquiries.index', 'active' => ['admin.enquiries.*'], 'icon' => 'mail'],
             ],
         ],
@@ -23,6 +22,9 @@
             'items' => [
                 ['label' => 'Bookings', 'route' => 'admin.bookings.index', 'active' => ['admin.bookings.*'], 'icon' => 'calendar-list'],
                 ['label' => 'Fleets', 'route' => 'admin.fleets.index', 'active' => ['admin.fleets.*'], 'icon' => 'car'],
+                ['label' => 'Amenities', 'route' => 'admin.amenities.index', 'active' => ['admin.amenities.*'], 'icon' => 'sparkles'],
+                ['label' => 'Sliders', 'route' => 'admin.sliders.index', 'active' => ['admin.sliders.*'], 'icon' => 'sliders'],
+                ['label' => 'Promotion Popups', 'route' => 'admin.promotion-popups.index', 'active' => ['admin.promotion-popups.*'], 'icon' => 'megaphone'],
                 ['label' => 'Locations', 'route' => 'admin.locations.index', 'active' => ['admin.locations.*'], 'icon' => 'map-pin'],
                 ['label' => 'Chauffeurs', 'route' => 'admin.chauffeurs.index', 'active' => ['admin.chauffeurs.*'], 'icon' => 'user'],
                 ['label' => 'Tours', 'route' => 'admin.tours.index', 'active' => ['admin.tours.*', 'admin.tour-categories.*', 'admin.tour-tags.*'], 'icon' => 'map'],
@@ -115,6 +117,20 @@
                                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4">
                                                     <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" />
                                                     <circle cx="12" cy="10" r="2.5" />
+                                                </svg>
+                                                @break
+                                            @case('sliders')
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4">
+                                                    <rect x="3" y="5" width="18" height="14" rx="2" />
+                                                    <path d="M8 9h8M8 12h8M8 15h5" />
+                                                </svg>
+                                                @break
+                                            @case('megaphone')
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-4 w-4">
+                                                    <path d="M3 12h2l9-4v8l-9-4H3v-0Z" />
+                                                    <path d="M13 9.5V14.5" />
+                                                    <path d="M18 10a3.5 3.5 0 0 1 0 4" />
+                                                    <path d="M20 8.5a6.5 6.5 0 0 1 0 7" />
                                                 </svg>
                                                 @break
                                             @case('calendar-list')

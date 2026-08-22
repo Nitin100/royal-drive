@@ -28,7 +28,6 @@
                             <tr class="text-left text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">
                                 <th class="px-4 py-3">Title</th>
                                 <th class="px-4 py-3">URL</th>
-                                <th class="px-4 py-3">Pricing</th>
                                 <th class="px-4 py-3">Gallery</th>
                                 <th class="px-4 py-3">Updated</th>
                                 <th class="px-4 py-3">Actions</th>
@@ -52,7 +51,6 @@
                 columns: [
                     { data: 'title', name: 'title' },
                     { data: 'url', name: 'url' },
-                    { data: 'pricing', name: 'pricing', orderable: false },
                     { data: 'gallery', name: 'gallery', orderable: false },
                     { data: 'updated', name: 'updated' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false },

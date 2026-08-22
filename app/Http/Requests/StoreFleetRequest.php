@@ -28,6 +28,8 @@ class StoreFleetRequest extends FormRequest
             'gallery_images.*' => ['image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'description' => ['nullable', 'string'],
             'pricing_config' => ['nullable', 'string'],
+            'amenities' => ['nullable', 'array'],
+            'amenities.*' => ['integer', 'exists:amenities,id'],
         ];
     }
 }

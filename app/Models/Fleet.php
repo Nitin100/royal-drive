@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Fleet extends Model
@@ -32,6 +33,11 @@ class Fleet extends Model
     public function images(): HasMany
     {
         return $this->hasMany(FleetImage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    public function amenities(): BelongsToMany
+    {
+        return $this->belongsToMany(Amenity::class);
     }
 
     public function getRouteKeyName(): string
