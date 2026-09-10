@@ -25,6 +25,9 @@ return new class extends Migration
 
             $table->index(['pickup_date', 'pickup_time']);
             $table->index('is_return_trip');
+            $table->date('return_date')->nullable()->after('pickup_time');
+            $table->time('return_time')->nullable()->after('return_date');
+
         });
     }
 

@@ -20,6 +20,7 @@ class Booking extends Model
     ];
 
     protected $fillable = [
+        'booking_number',
         'name',
         'email',
         'contact',
@@ -27,6 +28,8 @@ class Booking extends Model
         'dropoff_location_id',
         'pickup_date',
         'pickup_time',
+        'return_date',
+        'return_time',
         'is_return_trip',
         'passenger_count',
         'luggage_count',
