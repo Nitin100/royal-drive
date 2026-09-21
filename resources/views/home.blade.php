@@ -4,10 +4,73 @@
 
 @section('content')
 <div class="min-h-screen bg-[#050505] text-white selection:bg-[#d9b33f] selection:text-black">
-<header class="relative isolate overflow-hidden">
+<header class="relative isolate  ">
     @include('partials.site-header')
 </header>
-
+@php 
+    $vehicleFeatureIcons = [
+    '247-support' => [
+        'label' => '24/7 Support',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/telephone-fill.svg',
+    ],
+    'air-conditioning' => [
+        'label' => 'Air Conditioning',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/snow.svg',
+    ],
+    'airport-pickup' => [
+        'label' => 'Airport Pickup',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/airplane.svg',
+    ],
+    'automatic-transmission' => [
+        'label' => 'Automatic Transmission',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/gear-fill.svg',
+    ],
+    'bluetooth' => [
+        'label' => 'Bluetooth',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/bluetooth.svg',
+    ],
+    'child-seat' => [
+        'label' => 'Child Seat',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/people-fill.svg',
+    ],
+    'gps-navigation' => [
+        'label' => 'GPS Navigation',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/geo-alt-fill.svg',
+    ],
+    'leather-seats' => [
+        'label' => 'Leather Seats',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/journal-richtext.svg',
+    ],
+    'luggage-space' => [
+        'label' => 'Luggage Space',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/bag-fill.svg',
+    ],
+    'pet-friendly' => [
+        'label' => 'Pet Friendly',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/heart-pulse-fill.svg',
+    ],
+    'premium-audio' => [
+        'label' => 'Premium Audio',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/speaker-fill.svg',
+    ],
+    'snow-tire' => [
+        'label' => 'Snow Tire',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/cloud-snow-fill.svg',
+    ],
+    'sunroof' => [
+        'label' => 'Sunroof',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/sun-fill.svg',
+    ],
+    'usb-charging' => [
+        'label' => 'USB Charging',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/usb-symbol.svg',
+    ],
+    'wi-fi' => [
+        'label' => 'Wi‑Fi',
+        'icon' => 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/wifi.svg',
+    ],
+];
+@endphp
     <section id="services" class="bg-[#030303] py-6 sm:py-8 lg:py-10">
     <div class="mx-auto max-w-[1440px] px-3 sm:px-5 lg:px-6">
 
@@ -16,9 +79,9 @@
                     <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#d9b33f]">Our Services</p>
                     <h2 class="mt-4 font-serif text-4xl sm:text-6xl">Vehicles That<br><span class="text-[#d9b33f]">Command Respect.</span></h2>
                 </div>
-                <a href="#" class="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition hover:text-[#d9b33f]">
-                    View full  fleet →
-                </a>
+                <!-- <a href="#" class="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition hover:text-[#d9b33f]">
+                    View full  →
+                </a> -->
             </div>
 
 
@@ -76,7 +139,7 @@
             }
         @endphp
 
-        <div class="grid grid-cols-1 gap-[10px] sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid grid-cols-1 gap-[10px] sm:grid-cols-2 lg:grid-cols-3 pt-10">
             @foreach ($homepageServices->take(6) as $index => $service)
                 @php
                     $serviceData = is_object($service) ? [
@@ -99,7 +162,7 @@
                 @endphp
 
                 <article
-                    class="service-hover-card group relative min-h-[{{ $isFeatured ? '250' : '200' }}px] cursor-pointer overflow-hidden rounded-[15px] border border-[#181818] bg-[#090909] {{ $isFeatured ? 'sm:col-span-2' : '' }}"
+                    class="service-hover-card group relative {{ $isFeatured ? 'min-h-[250px] sm:col-span-2' : 'min-h-[200px]' }} cursor-pointer overflow-hidden rounded-[15px] border border-[#181818] bg-[#090909]"
                     data-service-modal
                     data-title="{{ $serviceData['title'] }}"
                     data-image="{{ $serviceData['image'] }}"
@@ -133,7 +196,7 @@
                     </div>
 
                     <div class="absolute bottom-0 left-0 z-10 p-5 transition-all duration-500 {{ $isFeatured ? 'group-hover:-translate-y-3 group-hover:opacity-0' : 'group-hover:opacity-0' }}">
-                        <h3 class="font-serif text-[{{ $isFeatured ? '22' : '20' }}px] text-white">
+                        <h3 class="font-serif {{ $isFeatured ? 'text-[22px]' : 'text-[20px]' }} text-white">
                             {{ $serviceData['title'] }}
                         </h3>
                     </div>
@@ -146,7 +209,7 @@
                         </div>
 
                         <div>
-                            <h3 class="font-serif text-[{{ $isFeatured ? '22' : '20' }}px] leading-tight text-[#080808]">
+                            <h3 class="font-serif {{ $isFeatured ? 'text-[22px]' : 'text-[20px]' }} leading-tight text-[#080808]">
                                 {{ $serviceData['title'] }}
                             </h3>
 
@@ -191,8 +254,8 @@
             <div class="relative">
                 <div class="absolute -left-4 -top-4 h-32 w-32 border-l border-t border-[#d9b33f]/60"></div>
                 <img
-                    src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1400&q=85"
-                    alt="Luxury vehicle"
+                    src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=85"
+                    alt="Luxury car"
                     class="relative aspect-[4/3] w-full rounded-sm object-cover grayscale-[15%]"
                 >
                 <div class="absolute -bottom-5 -right-5 hidden rounded-sm bg-[#d9b33f] px-7 py-5 text-black sm:block">
@@ -234,30 +297,46 @@
     {{-- =========================
         PROCESS
     ========================== --}}
-    <section id="process" class="bg-[#050505] pb-24 sm:pb-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="border-t border-white/10 pt-16">
-                <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-                    <div>
-                        <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#d9b33f]">The Process</p>
-                        <h2 class="mt-4 font-serif text-4xl sm:text-5xl">Effortless From<br><span class="text-[#d9b33f]">Start to Finish.</span></h2>
-                    </div>
+    <section id="process" class="bg-[#050505] py-16 sm:py-20 lg:py-24">
+        <div class="mx-auto max-w-[1280px] px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#d9b33f]">The Process</p>
+                <h2 class="mt-8 font-sans text-[clamp(2.7rem,5vw,6rem)] font-black leading-[0.92] tracking-[-0.055em] text-white">
+                    Effortless From<br>
+                    <span class="block">Start to Finish</span>
+                </h2>
+            </div>
 
-                    <div class="grid gap-0 sm:grid-cols-4">
-                        @php
-                            $steps = [
-                                ['01', 'Request', 'Tell us where, when and how you would like to travel.'],
-                                ['02', 'Confirm', 'We confirm your vehicle, chauffeur and journey details.'],
-                                ['03', 'Travel', 'Your chauffeur arrives prepared and ready on time.'],
-                                ['04', 'Arrive', 'Relax and enjoy a seamless journey to your destination.'],
-                            ];
-                        @endphp
+            <div class="mt-16">
+                @php
+                    $steps = [
+                        ['01', 'Choose Your Vehicle', 'Browse our curated fleet and select the vehicle that best fits your journey.'],
+                        ['02', 'Select Date & Time', 'Set your schedule. We will synchronise every detail to your requirements.'],
+                        ['03', 'Confirm Booking', 'A dedicated concierge will confirm and coordinate your reservation personally.'],
+                        ['04', 'Enjoy the Ride', 'Your chauffeur arrives early. You arrive exactly on time, impeccably composed.'],
+                    ];
+                @endphp
 
-                        @foreach ($steps as $step)
-                            <div class="border-l border-white/10 px-5 py-4 first:border-l-0">
-                                <span class="text-xs text-[#d9b33f]">{{ $step[0] }}</span>
-                                <h3 class="mt-7 font-serif text-xl">{{ $step[1] }}</h3>
-                                <p class="mt-3 text-xs leading-6 text-white/45">{{ $step[2] }}</p>
+                <div class="relative">
+                    <div class="absolute left-0 right-0 top-[19px] hidden h-px bg-[#d9b33f]/40 sm:block"></div>
+
+                    <div class="grid gap-8 sm:grid-cols-4 sm:gap-6 lg:gap-8">
+                        @foreach ($steps as $index => $step)
+                            <div class="relative sm:pt-0">
+                                <div class="mb-5 flex items-center justify-center sm:justify-start">
+                                    <span class="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d9b33f]/60 bg-[#050505] text-[11px] font-bold text-[#d9b33f] {{ $index === 0 ? 'bg-[#d9b33f] text-black border-[#d9b33f]' : '' }}">
+                                        {{ $step[0] }}
+                                    </span>
+                                </div>
+
+                                <div class="text-left sm:mt-8">
+                                    <h3 class="font-sans text-[clamp(1.1rem,2.1vw,2rem)] font-bold leading-tight tracking-[-0.03em] text-white">
+                                        {{ $step[1] }}
+                                    </h3>
+                                    <p class="mt-3 text-[11px] leading-[1.7] text-white/55 sm:text-[12px] lg:text-[13px]">
+                                        {{ $step[2] }}
+                                    </p>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -270,9 +349,9 @@
     {{-- =========================
         FLEET
     ========================== --}}
-    <section id="fleet" class="bg-[#d9b33f] py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+    <section id="fleet" class="bg-[#d9b33f] py-16 sm:py-20 lg:py-24">
+        <div class="mx-auto max-w-[1280px] px-3 sm:px-5 lg:px-6">
+               <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
                 <div>
                     <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#ffffff]">Our Fleet</p>
                     <h2 class="mt-4 font-serif text-4xl sm:text-6xl">Vehicles That<br><span class="text-[#ffffff]">Command Respect.</span></h2>
@@ -281,6 +360,8 @@
                     View full fleet →
                 </a>
             </div>
+
+            <div class="grid gap-5 pt-5 lg:grid-cols-4">
 
             @php
                 $fleetBrowseList = $featuredFleets ?? collect();
@@ -318,34 +399,91 @@
                 }
             @endphp
 
-            <div class="mt-14 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-                @foreach ($fleetBrowseList->take(4) as $vehicle)
+
+
+                @foreach ($fleetBrowseList->take(4) as $fleet)
                     @php
-                        $vehicleImage = $vehicle->banner_image_path
-                            ? asset('storage/' . $vehicle->banner_image_path)
-                            : asset('images/vehicles/mercedes-s-class.jpg');
-                        $vehiclePrice = collect($vehicle->pricing_config ?? [])->first()['price']
-                            ?? collect($vehicle->pricing_config ?? [])->first()['amount']
-                            ?? 65;
+                        $fleetItem = is_object($fleet) ? $fleet : (object) $fleet;
+                        $fleetName = $fleetItem->name ?? 'Luxury Vehicle';
+                        $fleetCategory = $fleetItem->category ?? 'Luxury Sedan';
+                        $fleetImage = $fleetItem->banner_image_path
+                            ? asset('storage/' . $fleetItem->banner_image_path)
+                            : 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80';
+                        $fleetPassengers = $fleetItem->passenger_capacity ?? 4;
+                        $fleetLuggage = $fleetItem->luggage_capacity ?? 3;
+                        $fleetDescription = $fleetItem->description ?? 'Luxury transportation tailored to your schedule and style.';
+
+                        $fleetAmenities = collect();
+                        if (isset($fleetItem->amenityFleet) && $fleetItem->amenityFleet instanceof \Illuminate\Support\Collection) {
+                            $fleetAmenities = $fleetItem->amenityFleet->pluck('amenity')->filter();
+                        } elseif (method_exists($fleetItem, 'amenityFleet')) {
+                            $fleetAmenities = $fleetItem->amenityFleet()->with('amenity')->get()->pluck('amenity')->filter();
+                        }
+
+                        $featureList = $fleetAmenities->isNotEmpty()
+                            ? $fleetAmenities->pluck('name')->filter()->take(2)->values()->all()
+                            : ['Air Conditioning', 'Leather Seats'];
+
+                        $featureText = implode(' · ', $featureList);
                     @endphp
 
-                    <article class="group overflow-hidden rounded-2xl border border-none bg-[#101010]">
-                        <div class="relative aspect-[4/3] overflow-hidden">
-                            <img src="{{ $vehicleImage }}" alt="{{ $vehicle->name ?? 'Luxury Vehicle' }}" class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                            <span class="absolute bottom-4 left-4 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[8px] uppercase tracking-[0.2em] text-white/75 backdrop-blur">
-                                {{ $vehicle->category ?? 'Luxury Vehicle' }}
-                            </span>
+                    <article class="group overflow-hidden rounded-[18px] border border-[#1b150d] bg-[#090909] shadow-[0_12px_30px_rgba(0,0,0,0.18)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.24)]">
+                        <div class="relative h-[230px] overflow-hidden bg-black">
+                            <img
+                                src="{{ $fleetImage }}"
+                                alt="{{ $fleetName }}"
+                                class="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                            >
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
                         </div>
-                        <div class="p-5">
-                            <h3 class="font-serif text-2xl">{{ $vehicle->name ?? 'Luxury Vehicle' }}</h3>
-                            <p class="mt-2 text-xs leading-6 text-white/50">
-                                <?= strip_tags($vehicle->description ?? 'Elegant, quiet and tailored for executive transfers and private occasions.') ?>
-                            </p>
-                            <div class="mt-4 text-[9px] font-bold uppercase tracking-[0.2em] text-[#d9b33f]">
-                                From OMR {{ $vehiclePrice }}
+
+                        <div class="px-4 pb-4 pt-4 text-white">
+                            <div class="flex items-start justify-between gap-3">
+                                <p class="text-[10px] font-bold uppercase tracking-[0.28em] text-[#d9b33f]">
+                                    {{ $fleetCategory }}
+                                </p>
+
+                                <div class="inline-flex items-center justify-center rounded-full border border-[#d9b83c]/50 bg-[#d9b83c]/10 px-3 py-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-[#f3d978]">
+                                    OMR {{ number_format((float) (collect($fleetItem->pricing_config ?? [])->first()['price'] ?? collect($fleetItem->pricing_config ?? [])->first()['amount'] ?? 0), 2) }}
+                                </div>
                             </div>
-                            <a href="{{ route('fleet.details', $vehicle->slug ?? $vehicle->name) }}" class="mt-5 inline-block text-[9px] font-bold uppercase tracking-[0.2em] text-[#d9b33f]">View Details →</a>
+                            <h3 class="mt-4 font-serif text-[18px] leading-[1.1] text-white">
+                                {{ $fleetName }}
+                            </h3>
+
+                            <div class="mt-4 flex items-center gap-5 border-t border-white/10 pt-4">
+                                <div class="flex items-center gap-2 text-[12px] text-[#d9b33f]">
+                                    <svg class="h-4 w-4 text-[#d9b33f]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d="M16 19V17C16 15.3431 14.6569 14 13 14H7C5.34315 14 4 15.3431 4 17V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="10" cy="7" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+                                        <path d="M18.5 10.5C19.8807 10.5 21 9.38071 21 8C21 6.61929 19.8807 5.5 18.5 5.5C17.1193 5.5 16 6.61929 16 8C16 9.38071 17.1193 10.5 18.5 10.5Z" stroke="currentColor" stroke-width="1.8"/>
+                                        <path d="M18.5 11.5V19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>{{ $fleetPassengers }} Passenger</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[12px] text-[#d9b33f]">
+                                    <svg class="h-4 w-4 text-[#d9b33f]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path d="M8 8V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                        <rect x="5" y="8" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                                        <path d="M9 12H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                                    </svg>
+                                    <span>{{ $fleetLuggage }} Luggage</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 text-[13px] leading-[1.7] text-white/70">
+                                <?= $fleetDescription ?>
+                            </div>
+
+                            <div class="mt-5 border-t border-white/10 pt-4 text-[12px] text-[#f5f0dc]">
+                                {{ $featureText }}
+                            </div>
+
+                            <div class="mt-6 border-t border-white/10 pt-4">
+                                <a href="{{ url('fleet-details') }}/{{ $fleetItem->slug }}" class="inline-block text-[10px] font-bold uppercase tracking-[0.22em] text-[#d9b33f] transition hover:text-[#f0d87a]">
+                                    View Details <span class="ml-2">—</span>
+                                </a>
+                            </div>
                         </div>
                     </article>
                 @endforeach
@@ -1091,7 +1229,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
 
                         <div id="featuredFleetLuggage" class="rounded-md border border-white/10 bg-white/[0.025] px-2 py-2 text-[8px] text-white/70">
-                            <span class="mr-1 text-[#368fe7]">▣</span>
+                            <svg class="mr-1 inline-block h-3 w-3 text-[#368fe7] align-middle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M8 8V7C8 5.34315 9.34315 4 11 4H13C14.6569 4 16 5.34315 16 7V8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                <rect x="5" y="8" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                                <path d="M9 12H15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                            </svg>
                             {{ $selectedFleetLuggage }} Bags
                         </div>
 
@@ -1176,7 +1318,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </h2>
 
                     <p
-                        class="mt-2 text-[7px] text-white/40 sm:text-[8px]"
+                        class="mt-2 text-[12px] text-white/40 sm:text-[12px]"
                     >
                         Reserve your chauffeur in less than a minute.
                     </p>
@@ -1211,13 +1353,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div>
                             <label
                                 for="pickup_location"
-                                class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
                             >
                                 Pickup Location
                             </label>
 
                             <div class="relative">
-
                                 <span
                                     class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-[#df357d]"
                                 >
@@ -1228,10 +1369,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                     id="pickup_location"
                                     name="pickup_location"
                                     type="text"
+                                    autocomplete="off"
                                     placeholder="Enter pickup address..."
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[8px] text-white outline-none placeholder:text-white/25 transition focus:border-[#d9b83c]/50 focus:ring-1 focus:ring-[#d9b83c]/20"
+                                    class="location-search h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[10px] text-white outline-none placeholder:text-white/25 transition focus:border-[#d9b83c]/50 focus:ring-1 focus:ring-[#d9b83c]/20"
                                 >
 
+                                <div class="location-results absolute left-0 right-0 top-[calc(100%+8px)] z-50 hidden max-h-72 overflow-y-auto rounded-xl border border-[#d9b83c]/20 bg-white shadow-[0_20px_40px_rgba(0,0,0,0.3)]"></div>
                             </div>
                         </div>
 
@@ -1240,13 +1383,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div>
                             <label
                                 for="dropoff_location"
-                                class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
                             >
                                 Drop-Off Location
                             </label>
 
                             <div class="relative">
-
                                 <span
                                     class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[9px] text-[#df357d]"
                                 >
@@ -1257,10 +1399,12 @@ document.addEventListener('DOMContentLoaded', function () {
                                     id="dropoff_location"
                                     name="dropoff_location"
                                     type="text"
+                                    autocomplete="off"
                                     placeholder="Enter destination..."
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[8px] text-white outline-none placeholder:text-white/25 transition focus:border-[#d9b83c]/50 focus:ring-1 focus:ring-[#d9b83c]/20"
+                                    class="location-search h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[10px] text-white outline-none placeholder:text-white/25 transition focus:border-[#d9b83c]/50 focus:ring-1 focus:ring-[#d9b83c]/20"
                                 >
 
+                                <div class="location-results absolute left-0 right-0 top-[calc(100%+8px)] z-50 hidden max-h-72 overflow-y-auto rounded-xl border border-[#d9b83c]/20 bg-white shadow-[0_20px_40px_rgba(0,0,0,0.3)]"></div>
                             </div>
                         </div>
 
@@ -1277,7 +1421,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             <label
                                 for="pickup_date"
-                                class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
                             >
                                 Pickup Date
                             </label>
@@ -1294,7 +1438,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     id="pickup_date"
                                     name="pickup_date"
                                     type="date"
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[8px] text-white outline-none transition focus:border-[#d9b83c]/50"
+                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[10px] text-white outline-none transition focus:border-[#d9b83c]/50"
                                 >
 
                             </div>
@@ -1307,7 +1451,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             <label
                                 for="pickup_time"
-                                class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
                             >
                                 Pickup Time
                             </label>
@@ -1324,7 +1468,70 @@ document.addEventListener('DOMContentLoaded', function () {
                                     id="pickup_time"
                                     name="pickup_time"
                                     type="time"
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[8px] text-white outline-none transition focus:border-[#d9b83c]/50"
+                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[10px] text-white outline-none transition focus:border-[#d9b83c]/50"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+
+                        {{-- Drop-off date --}}
+                        <div>
+
+                            <label
+                                for="dropoff_date"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                            >
+                                Drop-Off Date
+                            </label>
+
+                            <div class="relative">
+
+                                <span
+                                    class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[8px] text-[#4287df]"
+                                >
+                                    ▣
+                                </span>
+
+                                <input
+                                    id="dropoff_date"
+                                    name="return_date"
+                                    type="date"
+                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[10px] text-white outline-none transition focus:border-[#d9b83c]/50"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- Drop-off time --}}
+                        <div>
+
+                            <label
+                                for="dropoff_time"
+                                class="mb-2 block text-[10px] font-semibold uppercase tracking-[0.08em] text-white/80"
+                            >
+                                Drop-Off Time
+                            </label>
+
+                            <div class="relative">
+
+                                <span
+                                    class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[8px] text-white/60"
+                                >
+                                    ◷
+                                </span>
+
+                                <input
+                                    id="dropoff_time"
+                                    name="return_time"
+                                    type="time"
+                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 text-[10px] text-white outline-none transition focus:border-[#d9b83c]/50"
                                 >
 
                             </div>
@@ -1337,94 +1544,33 @@ document.addEventListener('DOMContentLoaded', function () {
                     {{-- =================================================
                         RETURN TRIP
                     ================================================= --}}
-                    <div class="mt-4">
+                   
 
-                        <div
-                            class="rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 py-3"
-                        >
-
-                            <div class="flex items-center justify-between">
-
-                                <div>
-                                    <div
-                                        class="text-[6px] font-semibold uppercase tracking-[0.08em] text-white/70"
-                                    >
-                                        Return Trip
-                                    </div>
-
-                                    <div class="mt-1 text-[6px] text-white/25">
-                                        Once way journey
-                                    </div>
-                                </div>
-
-
-                                <div class="flex items-center gap-2">
-
-                                    <span
-                                        class="text-[6px] font-medium text-[#d9b83c]"
-                                    >
-                                        One Way
-                                    </span>
-
-                                    {{-- Toggle --}}
-                                    <label class="relative inline-flex cursor-pointer">
-
-                                        <input
-                                            type="checkbox"
-                                            id="return_trip"
-                                            name="return_trip"
-                                            value="1"
-                                            class="peer sr-only"
-                                        >
-
-                                        <span
-                                            class="h-[17px] w-[30px] rounded-full bg-white/10 transition peer-checked:bg-[#d9b83c]"
-                                        ></span>
-
-                                        <span
-                                            class="absolute left-[2px] top-[2px] h-[13px] w-[13px] rounded-full bg-white shadow-sm transition peer-checked:translate-x-[13px]"
-                                        ></span>
-
-                                    </label>
-
-                                    <span class="text-[6px] text-white/25">
-                                        Return
-                                    </span>
-
-                                </div>
-
-                            </div>
-
+                    {{-- =================================================
+                        CUSTOMER DETAILS
+                    ================================================= --}}
+                    <div class="mt-5">
+                        <div class="mb-3 text-[12px] uppercase tracking-[0.2em] text-white/30">
+                            Customer Details
                         </div>
 
-                        <div id="returnTripFields" class="mt-4 hidden grid gap-4 sm:grid-cols-2">
+                        <div class="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <label for="return_date" class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80">
-                                    Return Date
-                                </label>
-                                <input
-                                    id="return_date"
-                                    name="return_date"
-                                    type="date"
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[8px] text-white outline-none transition focus:border-[#d9b83c]/50"
-                                >
+                                <label for="customer_name" class="mb-2 block text-[10px] font-semibold uppercase text-white/80">Name</label>
+                                <input id="customer_name" name="name" type="text" placeholder="Full name" required class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[10px] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50">
                             </div>
 
                             <div>
-                                <label for="return_time" class="mb-2 block text-[6px] font-semibold uppercase tracking-[0.08em] text-white/80">
-                                    Return Time
-                                </label>
-                                <input
-                                    id="return_time"
-                                    name="return_time"
-                                    type="time"
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[8px] text-white outline-none transition focus:border-[#d9b83c]/50"
-                                >
+                                <label for="customer_phone" class="mb-2 block text-[10px] font-semibold uppercase text-white/80">Contact</label>
+                                <input id="customer_phone" name="contact" type="tel" placeholder="Phone number" required class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[10px] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50">
                             </div>
                         </div>
 
+                        <div class="mt-4">
+                            <label for="customer_email" class="mb-2 block text-[10px] font-semibold uppercase text-white/80">Email</label>
+                            <input id="customer_email" name="email" type="email" placeholder="Email address" required class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[10px] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50">
+                        </div>
                     </div>
-
 
                     {{-- =================================================
                         JOURNEY DETAILS
@@ -1432,7 +1578,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="mt-5">
 
                         <div
-                            class="mb-3 text-[5px] uppercase tracking-[0.2em] text-white/30"
+                            class="mb-3 text-[12px] uppercase tracking-[0.2em] text-white/30"
                         >
                             Journey Details
                         </div>
@@ -1445,7 +1591,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 <label
                                     for="passengers"
-                                    class="mb-2 block text-[6px] font-semibold uppercase text-white/80"
+                                    class="mb-2 block text-[10px] font-semibold uppercase text-white/80"
                                 >
                                     Passengers
                                 </label>
@@ -1461,7 +1607,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <select
                                         id="passengers"
                                         name="passengers"
-                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[8px] text-white outline-none focus:border-[#d9b83c]/50"
+                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[10px] text-white outline-none focus:border-[#d9b83c]/50"
                                     >
                                         <option value="">
                                             Select passengers
@@ -1488,7 +1634,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                 <label
                                     for="luggage"
-                                    class="mb-2 block text-[6px] font-semibold uppercase text-white/80"
+                                    class="mb-2 block text-[10px] font-semibold uppercase text-white/80"
                                 >
                                     Luggage
                                 </label>
@@ -1504,7 +1650,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     <select
                                         id="luggage"
                                         name="luggage"
-                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[8px] text-white outline-none focus:border-[#d9b83c]/50"
+                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[10px] text-white outline-none focus:border-[#d9b83c]/50"
                                     >
                                         <option value="">
                                             Select bags
@@ -1524,62 +1670,18 @@ document.addEventListener('DOMContentLoaded', function () {
                                 </div>
 
                             </div>
+                            
+                    </div>
 
-
-                            {{-- Vehicle --}}
-                            <div>
-
-                                <label
-                                    for="vehicle"
-                                    class="mb-2 block text-[6px] font-semibold uppercase text-white/80"
-                                >
-                                    Vehicle Class
-                                </label>
-
-                                <div class="relative">
-
-                                    <span
-                                        class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[8px] text-[#a443d8]"
-                                    >
-                                        ◆
-                                    </span>
-
-                                    <select
-                                        id="vehicle"
-                                        name="vehicle"
-                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[8px] text-white outline-none focus:border-[#d9b83c]/50"
-                                    >
-                                        <option value="">
-                                            Select your vehicle
-                                        </option>
-                                        <option value="mercedes-s-class">
-                                            Mercedes S-Class
-                                        </option>
-                                        <option value="bmw-7-series">
-                                            BMW 7 Series
-                                        </option>
-                                        <option value="rolls-royce-ghost">
-                                            Rolls Royce Ghost
-                                        </option>
-                                    </select>
-
-                                    <span
-                                        class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[7px] text-[#d9b83c]"
-                                    >
-                                        ▼
-                                    </span>
-
-                                </div>
-
-                            </div>
-
+ 
+                        <div class="mt-4 grid gap-4 sm:grid-cols-2">
 
                             {{-- Service type --}}
                             <div>
 
                                 <label
                                     for="service_type"
-                                    class="mb-2 block text-[6px] font-semibold uppercase text-white/80"
+                                    class="mb-2 block text-[10px] font-semibold uppercase text-white/80"
                                 >
                                     Service Type
                                 </label>
@@ -1594,30 +1696,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                     <select
                                         id="service_type"
-                                        name="service_type"
-                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[8px] text-white outline-none focus:border-[#d9b83c]/50"
+                                        name="service_id"
+                                        class="h-[35px] w-full appearance-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 pl-8 pr-8 text-[10px] text-white outline-none focus:border-[#d9b83c]/50"
                                     >
-                                        <option value="">
-                                            Airport Transfer
-                                        </option>
-                                        <option value="airport-transfer">
-                                            Airport Transfer
-                                        </option>
-                                        <option value="corporate-travel">
-                                            Corporate Travel
-                                        </option>
-                                        <option value="hourly-hire">
-                                            Hourly Hire
-                                        </option>
-                                        <option value="special-event">
-                                            Special Event
-                                        </option>
-                                        <option value="wedding-transport">
-                                            Wedding Transport
-                                        </option>
-                                        <option value="private-aviation">
-                                            Private Aviation
-                                        </option>
+                                        <option value="">Select service</option>
+                                        @foreach ($services as $service)
+                                            <option value="{{ $service->id }}">{{ $service->title }}</option>
+                                        @endforeach
                                     </select>
 
                                     <span
@@ -1630,17 +1715,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             </div>
 
-                        </div>
-
-
-                        {{-- =================================================
-                            FLIGHT NUMBER
-                        ================================================= --}}
-                        <div class="mt-4">
+                            <div>
 
                             <label
                                 for="flight_number"
-                                class="mb-2 block text-[6px] font-semibold uppercase text-white/80"
+                                class="mb-2 block text-[10px] font-semibold uppercase text-white/80"
                             >
                                 Flight Number
                             </label>
@@ -1658,14 +1737,20 @@ document.addEventListener('DOMContentLoaded', function () {
                                     name="flight_number"
                                     type="text"
                                     placeholder="e.g. EK 417, AA 204..."
-                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[8px] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50"
+                                    class="h-[35px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] pl-8 pr-3 text-[10px] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50"
                                 >
+
+                                </div>
 
                             </div>
 
                         </div>
 
-                    </div>
+
+                        {{-- =================================================
+                            FLIGHT NUMBER
+                        ================================================= --}}
+                        
 
 
                     {{-- =================================================
@@ -1674,7 +1759,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="mt-5">
 
                         <div
-                            class="mb-3 text-[5px] uppercase tracking-[0.2em] text-white/30"
+                            class="mb-3 text-[12px] uppercase tracking-[0.2em] text-white/30"
                         >
                             Special Requests
                         </div>
@@ -1691,7 +1776,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             name="special_requirements"
                             rows="3"
                             placeholder="Tell us any special requirements — child seat, meet & greet, preferred route, beverages, or any specific needs..."
-                            class="w-full resize-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 py-3 text-[8px] leading-[1.5] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50"
+                            class="w-full resize-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 py-3 text-[10px] leading-[1.5] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50"
                         ></textarea>
 
                     </div>
@@ -1705,37 +1790,41 @@ document.addEventListener('DOMContentLoaded', function () {
                     >
 
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[7px] text-[#d9b83c]">
-                                🔒
-                            </span>
-                            <span class="text-[5px] text-white/50">
+                            <svg class="h-[18px] w-[18px] text-[#d9b83c]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M7 10V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                                <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.7"/>
+                                <path d="M12 14V16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                            </svg>
+                            <span class="text-[10px] text-white/50">
                                 Secure Booking
                             </span>
                         </div>
 
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[7px] text-[#d9b83c]">
-                                ⚡
-                            </span>
-                            <span class="text-[5px] text-white/50">
+                            <svg class="h-[18px] w-[18px] text-[#d9b83c]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M13 2L5 13H11L10 22L18 11H12L13 2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="text-[10px] text-white/50">
                                 Instant Confirmation
                             </span>
                         </div>
 
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[7px] text-[#438be2]">
-                                ▣
-                            </span>
-                            <span class="text-[5px] text-white/50">
+                            <svg class="h-[18px] w-[18px] text-[#438be2]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12Z" stroke="currentColor" stroke-width="1.7"/>
+                                <path d="M12 8V12L14.5 14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="text-[10px] text-white/50">
                                 Free Cancellation
                             </span>
                         </div>
 
                         <div class="flex items-center gap-1.5">
-                            <span class="text-[7px] text-[#8d4bda]">
-                                ▣
-                            </span>
-                            <span class="text-[5px] text-white/50">
+                            <svg class="h-[18px] w-[18px] text-[#8d4bda]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M4 12.5V7.5C4 6.11929 5.11929 5 6.5 5H17.5C18.8807 5 20 6.11929 20 7.5V12.5C20 13.8807 18.8807 15 17.5 15H15L12 19L9 15H6.5C5.11929 15 4 13.8807 4 12.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                <path d="M8 10H16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                            </svg>
+                            <span class="text-[10px] text-white/50">
                                 24/7 Support
                             </span>
                         </div>
@@ -1748,19 +1837,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     ================================================= --}}
                     <div class="mt-4 flex gap-2">
 
-                        {{-- Cancel --}}
-                        <button
-                            type="reset"
-                            class="h-[35px] rounded-[7px] border border-[#d9b83c]/30 bg-transparent px-5 text-[7px] font-semibold text-[#d9b83c] transition hover:bg-[#d9b83c]/10"
-                        >
-                            Cancel
-                        </button>
+                     
 
 
                         {{-- Reserve --}}
                         <button
+                        id="submit"
                             type="submit"
-                            class="group flex h-[35px] flex-1 items-center justify-center gap-2 rounded-[7px] bg-gradient-to-r from-[#f4cf51] to-[#d9a900] text-[8px] font-bold text-[#17130a] shadow-[0_5px_20px_rgba(217,169,0,0.15)] transition duration-300 hover:brightness-105"
+                            class="group flex h-[35px] flex-1 items-center justify-center gap-2 rounded-[7px] bg-gradient-to-r from-[#f4cf51] to-[#d9a900] text-[12px] font-bold text-[#17130a] shadow-[0_5px_20px_rgba(217,169,0,0.15)] transition duration-300 hover:brightness-105"
                         >
                             <span>
                                 ◆
@@ -2069,6 +2153,99 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const locationSearchUrl = "{{ route('locations.search') }}";
+    const searchInputs = document.querySelectorAll('.location-search');
+
+    searchInputs.forEach((input) => {
+        const resultsBox = input.parentElement.querySelector('.location-results');
+        if (!resultsBox) return;
+
+        let searchTimer = null;
+
+        const hideResults = () => {
+            resultsBox.classList.add('hidden');
+            resultsBox.innerHTML = '';
+        };
+
+        const renderResults = (groups) => {
+            if (!groups || Object.keys(groups).length === 0) {
+                hideResults();
+                return;
+            }
+
+            const html = Object.entries(groups).map(([groupName, items]) => {
+                if (!items || !items.length) return '';
+
+                return `
+                    <div class="border-b border-[#d9b83c]/20 last:border-b-0">
+                        <div class="bg-[#f6f2d6] px-3 py-2 text-[9px] font-bold uppercase tracking-[0.18em] text-[#17130a]">
+                            ${groupName}
+                        </div>
+                        <div class="divide-y divide-[#d9b83c]/20 bg-white">
+                            ${items.map((item) => `
+                                <button
+                                    type="button"
+                                    class="location-option block w-full border-l border-transparent bg-white px-3 py-2 text-left text-[10px] text-[#17130a] transition duration-200 hover:border-[#d9b83c]/60 hover:bg-[#f6f2d6] hover:text-[#17130a]"
+                                    data-value="${item.value || item.name}"
+                                >
+                                    ${item.name}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            resultsBox.innerHTML = html;
+            resultsBox.classList.remove('hidden');
+
+            resultsBox.querySelectorAll('.location-option').forEach((button) => {
+                button.addEventListener('click', () => {
+                    input.value = button.dataset.value;
+                    hideResults();
+                });
+            });
+        };
+
+        const fetchResults = () => {
+            const query = input.value.trim();
+
+            if (query.length < 2) {
+                hideResults();
+                return;
+            }
+
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+                fetch(`${locationSearchUrl}?q=${encodeURIComponent(query)}&limit=8`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                    .then((response) => response.ok ? response.json() : Promise.reject(new Error('Search failed')))
+                    .then(renderResults)
+                    .catch(() => hideResults());
+            }, 200);
+        };
+
+        input.addEventListener('input', fetchResults);
+        input.addEventListener('focus', () => {
+            if (input.value.trim().length >= 2) {
+                fetchResults();
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!input.parentElement.contains(event.target)) {
+                hideResults();
+            }
+        });
+    });
+});
 </script>
 @endpush
 @endsection

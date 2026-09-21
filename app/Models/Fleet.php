@@ -35,6 +35,11 @@ class Fleet extends Model
         return $this->hasMany(FleetImage::class)->orderBy('sort_order')->orderBy('id');
     }
 
+    public function amenityFleet(): HasMany
+    {
+        return $this->hasMany(AmenityFleet::class);
+    }
+
     public function amenities(): BelongsToMany
     {
         return $this->belongsToMany(Amenity::class);

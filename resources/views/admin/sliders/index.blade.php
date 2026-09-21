@@ -49,8 +49,8 @@
                             <label for="image" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">Image</label>
                             <input id="image" name="image" type="file" accept="image/*" class="mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 shadow-sm file:mr-3 file:rounded file:border-0 file:bg-gray-100 file:px-3 file:py-2 file:text-sm file:font-medium dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 dark:file:bg-gray-800">
                             @if(!empty($sliderToEdit?->image_path))
-                                <div class="mt-3">
-                                    <img src="{{ Storage::disk('public')->url($sliderToEdit->image_path) }}" alt="Current slider image" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-700">
+                                <div class="mt-3 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+                                    <img src="{{ asset('storage/' . $sliderToEdit->image_path) }}" alt="Current slider image" class="h-20 w-auto rounded-lg border border-gray-200 dark:border-gray-700">
                                     <label class="mt-2 inline-flex items-center gap-2 text-xs text-gray-600 dark:text-gray-300">
                                         <input type="checkbox" name="remove_image" value="1"> Remove image
                                     </label>

@@ -113,7 +113,7 @@
                         <textarea id="contact_message" name="message" rows="4" placeholder="Tell us about your trip or requirements..." required class="w-full resize-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 py-3 text-[12px] leading-[1.5] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50">{{ old('message') }}</textarea>
                     </div>
 
-                    <button type="submit" class="mt-2 flex h-[42px] w-full items-center justify-center gap-2 rounded-[7px] bg-gradient-to-r from-[#f4cf51] to-[#d9a900] text-[16px] font-bold uppercase text-[#17130a] shadow-[0_5px_20px_rgba(217,169,0,0.15)]">
+                    <button id="submit" type="submit" class="mt-2 flex h-[42px] w-full items-center justify-center gap-2 rounded-[7px] bg-gradient-to-r from-[#f4cf51] to-[#d9a900] text-[16px] font-bold uppercase text-[#17130a] shadow-[0_5px_20px_rgba(217,169,0,0.15)]">
                         <span>◆</span>
                         <span>Send Enquiry</span>
                     </button>

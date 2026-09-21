@@ -28,7 +28,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $services = Service::query()->orderBy('title')->get();
-    $featuredFleets = Fleet::query()->orderByDesc('created_at')->take(4)->get();
+    $featuredFleets = Fleet::query()
+        ->with(['amenityFleet.amenity'])
+        ->orderByDesc('created_at')
+        ->take(4)
+        ->get();
     $blogPosts = Blog::query()
         ->where('is_featured', true)
         ->orderByDesc('created_at')
@@ -38,10 +42,12 @@ Route::get('/', function () {
     return view('home', compact('services', 'featuredFleets', 'blogPosts'));
 })->name('home');
 Route::get('/blog/{blog:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
+Route::get('/fleet-search', [FrontController::class, 'fleet_search'])->name('fleet.search');
 Route::get('/fleet-details/{fleet:slug}', [FrontController::class, 'fleet_details'])->name('fleet.details');
 Route::get('/contact-us', function () {
     return view('contact-us');
 })->name('contact.us');
+Route::get('/locations/search', [FrontController::class, 'search_locations'])->name('locations.search');
 Route::post('/contact-us', [FrontController::class, 'store_enquiry'])->name('contact.store');
 Route::post('/fleet-booking', [FrontController::class, 'fleet_booking'])->name('booking.store');
 Route::get('/booking-success/{bookingNumber}', [FrontController::class, 'booking_success'])->name('booking.success');

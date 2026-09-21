@@ -35,16 +35,13 @@ class FrontController extends Controller
             ]);
         }
 
-        $fleet->load(['amenities', 'images']);
+        $fleet->load(['amenities', 'amenityFleet.amenity', 'images']);
 
-        $features = $fleet->amenities->isNotEmpty()
-            ? $fleet->amenities->pluck('name')->all()
-            : [
-                'Executive chauffeur service',
-                'Premium leather seating',
-                'Complimentary bottled water',
-                'Airport meet & greet',
-            ];
+        $features = $fleet->amenities
+            ->map(function ($amenity) {
+                return $amenity->toArray();
+            })
+            ->all();
 
         return view('fleet-details', [
             'fleet' => $fleet,
@@ -94,14 +91,13 @@ class FrontController extends Controller
             'dropoff_location' => ['required', 'string', 'max:255'],
             'pickup_date' => ['required', 'date'],
             'pickup_time' => ['required', 'date_format:H:i'],
-            'return_date' => ['nullable', 'date', 'after_or_equal:pickup_date', 'required_if:return_trip,1'],
-            'return_time' => ['nullable', 'date_format:H:i', 'required_if:return_trip,1'],
-            'return_trip' => ['nullable', 'boolean'],
+            'return_date' => ['required', 'date', 'after_or_equal:pickup_date'],
+            'return_time' => ['required', 'date_format:H:i'],
             'passengers' => ['required', 'integer', 'min:1'],
             'luggage' => ['nullable', 'integer', 'min:0'],
             'fleet_id' => ['nullable', 'integer', 'exists:fleets,id'],
             'vehicle' => ['nullable', 'string', 'max:255'],
-            'service_type' => ['nullable', 'string', 'max:255'],
+            'service_id' => ['nullable', 'integer', 'exists:services,id'],
             'flight_number' => ['nullable', 'string', 'max:50'],
             'special_requirements' => ['nullable', 'string', 'max:2000'],
         ]);
@@ -115,7 +111,7 @@ class FrontController extends Controller
         $dropoffLocation = $this->resolveLocation($validated['dropoff_location'], $validated['service_type'] ?? null, 'dropoff');
 
         $fleet = $this->resolveFleet($validated['fleet_id'] ?? $validated['vehicle'] ?? null);
-        $service = $this->resolveService($validated['service_type'] ?? null);
+        //$service = $this->resolveService($validated['service_type'] ?? null);
 
         $bookingNumber = $this->generateBookingNumber();
 
@@ -134,7 +130,7 @@ class FrontController extends Controller
             'passenger_count' => (int) $validated['passengers'],
             'luggage_count' => (int) ($validated['luggage'] ?? 0),
             'fleet_id' => $fleet?->id,
-            'service_id' => $service?->id,
+            'service_id' => $validated['service_id'] ?? 0,
             'status' => 'pending',
             'flight_number' => $validated['flight_number'] ?? null,
             'special_requests' => $validated['special_requirements'] ?? null,
@@ -142,6 +138,67 @@ class FrontController extends Controller
 
         return redirect()->route('booking.success', ['bookingNumber' => $booking->booking_number])
             ->with('status', 'Your booking request has been received.');
+    }
+
+    public function search_locations(Request $request)
+    {
+        $query = trim((string) $request->query('q', ''));
+        $limit = max(5, min(12, (int) $request->query('limit', 10)));
+
+        $locations = Location::query()
+            ->where('is_active', true)
+            ->when($query !== '', fn ($locationQuery) => $locationQuery->where('name', 'like', "%{$query}%"))
+            ->orderBy('type')
+            ->orderBy('name')
+            ->limit($limit * 4)
+            ->get();
+
+        $grouped = [];
+
+        foreach ($locations as $location) {
+            $type = $location->type;
+            $label = Location::typeOptions()[$type] ?? ucfirst(str_replace('_', ' ', $type));
+
+            $grouped[$label][] = [
+                'value' => $location->name,
+                'name' => $location->name,
+                'type' => $location->type,
+            ];
+        }
+
+        return response()->json($grouped);
+    }
+
+    public function fleet_search(Request $request)
+    {
+        $passengers = max(1, (int) $request->query('passengers', 1));
+        $pickupLocation = trim((string) $request->query('pickup_location', ''));
+        $dropoffLocation = trim((string) $request->query('dropoff_location', ''));
+
+        $fleets = Fleet::query()
+            ->where('passenger_capacity', '>=', $passengers)
+            ->when($request->filled('vehicle'), function ($query) use ($request) {
+                $query->where(function ($innerQuery) use ($request) {
+                    $innerQuery->where('name', 'like', '%' . trim((string) $request->query('vehicle')) . '%')
+                        ->orWhere('category', 'like', '%' . trim((string) $request->query('vehicle')) . '%');
+                });
+            })
+            ->where('availability_status', '!=', 'unavailable')
+            ->orderBy('passenger_capacity')
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('fleet-search', [
+            'fleets' => $fleets,
+            'pickupLocation' => $pickupLocation,
+            'dropoffLocation' => $dropoffLocation,
+            'passengers' => $passengers,
+            'searchCriteria' => [
+                'pickup_location' => $pickupLocation,
+                'dropoff_location' => $dropoffLocation,
+                'passengers' => $passengers,
+            ],
+        ]);
     }
 
     public function booking_success($bookingNumber = null)

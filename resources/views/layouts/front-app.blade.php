@@ -38,6 +38,19 @@
     </style>
 
     @stack('styles')
+    <!-- <script>
+        var onSubmit = function(token) {
+          console.log('success!');
+          return true;
+        };
+
+        var onloadCallback = function() {
+          grecaptcha.render('submit', {
+            'sitekey' : '6LcqMcUtAAAAAL24EiqWIEqFzjpMNg9JI8-GugHL',
+            'callback' : onSubmit
+          });
+        };
+    </script> -->
 </head>
 
 <body class="min-h-screen bg-[#050505] text-white antialiased">
@@ -45,7 +58,50 @@
     {{-- Main application content --}}
     @yield('content')
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const slider = document.querySelector('[data-hero-slider]');
+            if (!slider) return;
+
+            const slides = Array.from(slider.querySelectorAll('[data-hero-slide]'));
+            const dots = Array.from(document.querySelectorAll('[data-slide-dot]'));
+
+            if (slides.length < 2) return;
+
+            let activeIndex = 0;
+            let autoRotate = null;
+
+            const showSlide = (index) => {
+                activeIndex = (index + slides.length) % slides.length;
+
+                slides.forEach((slide, slideIndex) => {
+                    slide.classList.toggle('hidden', slideIndex !== activeIndex);
+                    slide.classList.toggle('block', slideIndex === activeIndex);
+                });
+
+                dots.forEach((dot, dotIndex) => {
+                    const isActive = dotIndex === activeIndex;
+                    dot.classList.toggle('bg-[#d9b33f]', isActive);
+                    dot.classList.toggle('bg-white/40', !isActive);
+                });
+            };
+
+            dots.forEach((dot) => {
+                dot.addEventListener('click', () => {
+                    showSlide(Number(dot.dataset.slideDot));
+                    clearInterval(autoRotate);
+                    autoRotate = setInterval(() => showSlide(activeIndex + 1), 5000);
+                });
+            });
+
+            autoRotate = setInterval(() => showSlide(activeIndex + 1), 5000);
+        });
+    </script>
+
     {{-- Global scripts --}}
     @stack('scripts')
+     <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
 </body>
 </html>
