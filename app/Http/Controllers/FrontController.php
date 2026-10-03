@@ -50,6 +50,50 @@ class FrontController extends Controller
         ]);
     }
 
+    public function service_details(Service $service)
+    {
+        $service->load('images');
+
+        $matchingFleets = Fleet::query()
+            ->orderBy('name')
+            ->get()
+            ->filter(function ($fleet) use ($service) {
+                $serviceTitle = trim((string) ($service->title ?? ''));
+
+                if ($serviceTitle === '') {
+                    return false;
+                }
+
+                $plans = is_array($fleet->pricing_config ?? null) ? $fleet->pricing_config : [];
+
+                return collect($plans)->contains(function ($plan) use ($serviceTitle) {
+                    $planName = trim((string) ($plan['name'] ?? ''));
+
+                    return strtolower($planName) === strtolower($serviceTitle);
+                });
+            })
+            ->values();
+
+        $matchingFleets = $matchingFleets->map(function ($fleet) use ($service) {
+            $plans = is_array($fleet->pricing_config ?? null) ? $fleet->pricing_config : [];
+            $matchedPlan = collect($plans)->first(function ($plan) use ($service) {
+                $planName = trim((string) ($plan['name'] ?? ''));
+
+                return strtolower($planName) === strtolower(trim((string) ($service->title ?? '')));
+            });
+
+            $fleet->matched_price = (float) ($matchedPlan['price'] ?? $matchedPlan['amount'] ?? 0);
+            $fleet->matched_service_type = $service->service_type ?? 'Daily';
+
+            return $fleet;
+        });
+
+        return view('service-details', [
+            'service' => $service,
+            'matchingFleets' => $matchingFleets,
+        ]);
+    }
+
     public function store_enquiry(Request $request): RedirectResponse
     {
         $validated = $request->validate([

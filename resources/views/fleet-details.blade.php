@@ -9,6 +9,7 @@
     $prefillDropoffDate = trim((string) request('dropoff_date', ''));
     $prefillPassengers = (int) request('passengers', $fleet->passenger_capacity ?? 4);
     $serviceOptions = \App\Models\Service::query()->orderBy('title')->get();
+    $serviceTypeMap = $serviceOptions->pluck('service_type', 'id')->all();
 
     $heroSlides = collect();
     $fallbackHero = asset('images/vehicles/mercedes-s-class.jpg');
@@ -148,19 +149,19 @@
     ],
 ];
 @endphp
-                <div class="rounded-[20px] border border-white/10 bg-[#111110] p-6 sm:p-8">
+                <div class="rounded-[20px] border border-white/10 bg-[#111110] p-5 sm:p-6">
                     <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#d9b33f]">Fleet Features</p>
-                    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                    <div class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                         @foreach ($fleetFeatures as $feature)
-                            <div class="flex items-start gap-3 rounded-[12px] border border-white/10 bg-white/[0.02] p-4">
-                                <span class="mt-1 text-[#d9b33f]">
+                            <div class="flex items-start gap-2 rounded-[10px] border border-white/10 bg-white/[0.02] p-3">
+                                <span class="mt-0.5 text-[#d9b33f]">
                                    @if ($vehicleFeatureIcons[$feature['slug']]['icon'])
-                                        <img src="{{ $vehicleFeatureIcons[$feature['slug']]['icon'] ?? '' }}" alt="{{ $vehicleFeatureIcons[$feature['slug']]['label'] ?? '' }}" class="gold-icon h-5 w-5" aria-hidden="true">
+                                        <img src="{{ $vehicleFeatureIcons[$feature['slug']]['icon'] ?? '' }}" alt="{{ $vehicleFeatureIcons[$feature['slug']]['label'] ?? '' }}" class="gold-icon h-4 w-4" aria-hidden="true">
                                     @else
                                         ✦
                                     @endif
                                 </span>
-                                <span class="text-sm text-white/80">{{ $vehicleFeatureIcons[$feature['slug']]['label'] ?? $feature['name'] }}</span>
+                                <span class="text-xs text-white/80">{{ $vehicleFeatureIcons[$feature['slug']]['label'] ?? $feature['name'] }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -170,9 +171,15 @@
             <aside class="rounded-[20px] border border-[#292929] bg-[#121211] p-5 text-white shadow-[0_20px_60px_rgba(0,0,0,0.15)] sm:p-6 lg:p-7">
                 <div class="border-b border-white/10 pb-5">
                     <div class="text-[12px] font-semibold uppercase tracking-[0.25em] text-[#d9b83c]">From</div>
-                    <div class="mt-3 font-serif text-4xl text-[#d9b83c]">OMR {{ number_format((float) $fleetPrice, 2) }}</div>
+                    <div class="mt-3 font-serif text-4xl text-[#d9b83c]">
+                        <span class="fleet-price-value" data-base-price="{{ (float) $fleetPrice }}">OMR {{ number_format((float) $fleetPrice, 2) }}</span>
+                        <span> / </span>
+                        <span id="fleet-price-unit">Day</span>
+                    </div>
                     <p class="mt-2 text-[10px] text-white/50">Ideal for executive trips, airport arrivals, and premium city transfers.</p>
                 </div>
+
+               
 
                 <form action="{{ route('booking.store') }}" method="POST" class="mt-6">
                     @csrf
@@ -280,7 +287,7 @@
                             <select id="service_type" name="service_id" class="h-[38px] w-full rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 text-[12px] text-white outline-none focus:border-[#d9b83c]/50">
                                 <option value="">Select service</option>
                                 @foreach ($serviceOptions as $service)
-                                    <option value="{{ $service->id }}">{{ $service->title }}</option>
+                                    <option value="{{ $service->id }}" data-service-type="{{ $service->service_type ?? 'Daily' }}">{{ $service->title }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -316,7 +323,20 @@
                             <label for="special_requirements" class="mb-2 block text-[12px] font-semibold uppercase tracking-[0.08em] text-white/80">Special Requests</label>
                             <textarea id="special_requirements" name="special_requirements" rows="3" placeholder="Tell us any special requirements..." required class="w-full resize-none rounded-[7px] border border-white/10 bg-[#1b1b1a] px-3 py-3 text-[12px] leading-[1.5] text-white outline-none placeholder:text-white/25 focus:border-[#d9b83c]/50"></textarea>
                         </div>
+
+
                     </div>
+
+                     <div class="mt-5 rounded-[12px] border border-[#d9b83c]/20 bg-[#1b1a16] p-4">
+                    <div class="text-[10px] font-semibold uppercase tracking-[0.25em] text-white/50">Final Booking Price</div>
+                    <div class="mt-2 flex items-center justify-between gap-3">
+                        <div class="font-serif text-2xl text-[#d9b83c]">
+                            OMR <span id="final-booking-price">{{ number_format((float) $fleetPrice, 2) }}</span>
+                        </div>
+                        <span id="final-booking-service-label" class="rounded-full border border-[#d9b83c]/30 bg-[#f6e7a4]/10 px-2 py-1 text-[9px] font-semibold uppercase tracking-[0.15em] text-[#f0d869]">Daily</span>
+                    </div>
+                    <p id="final-booking-meta" class="mt-2 text-[10px] text-white/50">1 Day booking</p>
+                </div>
 
                     <button id="submit" type="submit" class="mt-6 flex h-[42px] w-full items-center justify-center gap-2 rounded-[7px] bg-gradient-to-r from-[#f4cf51] to-[#d9a900] text-[18px] font-bold uppercase text-[#17130a] shadow-[0_5px_20px_rgba(217,169,0,0.15)]">
                         <span>◆</span>
@@ -326,7 +346,7 @@
             </aside>
             
         </div>
-         <section class="space-y-8">
+         <section class="space-y-8 mt-3">
                
                 <div class="rounded-[20px] border border-white/10 bg-[#111110] p-6 sm:p-8">
                     <p class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#d9b33f]">Vehicle Description</p>
@@ -342,6 +362,103 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    const serviceTypeMap = @json($serviceTypeMap);
+    const pricingConfig = @json($fleet->pricing_config ?? []);
+    const serviceSelect = document.getElementById('service_type');
+    const priceUnitEl = document.getElementById('fleet-price-unit');
+    const finalBookingPriceEl = document.getElementById('final-booking-price');
+    const finalBookingServiceLabelEl = document.getElementById('final-booking-service-label');
+    const finalBookingMetaEl = document.getElementById('final-booking-meta');
+    const priceValueEl = document.querySelector('.fleet-price-value');
+    const basePrice = Number(priceValueEl?.dataset?.basePrice || 0);
+
+    const getUnitLabel = (serviceType) => {
+        const unitMap = {
+            Daily: 'Day',
+            Weekly: 'Week',
+            Monthly: 'Month',
+            'Long Lease': 'Lease',
+        };
+
+        return unitMap[serviceType] || 'Day';
+    };
+
+    const getSelectedServiceType = () => {
+        if (!serviceSelect) {
+            return 'Daily';
+        }
+
+        const selectedOption = serviceSelect.selectedOptions[0];
+        if (selectedOption?.dataset?.serviceType) {
+            return selectedOption.dataset.serviceType;
+        }
+
+        if (serviceSelect.value) {
+            return serviceTypeMap[serviceSelect.value] || 'Daily';
+        }
+
+        const firstServiceOption = [...serviceSelect.options].find((option) => option.value && option.dataset.serviceType);
+        return firstServiceOption?.dataset?.serviceType || 'Daily';
+    };
+
+    const getSelectedPlanPrice = () => {
+        if (!serviceSelect) {
+            return basePrice;
+        }
+
+        const selectedOption = serviceSelect.selectedOptions[0];
+        const selectedText = (selectedOption?.textContent || '').trim();
+
+        if (!selectedText) {
+            return basePrice;
+        }
+
+        const matchedPlan = pricingConfig.find((plan) => {
+            const planName = String(plan?.name || '').trim();
+            return planName.toLowerCase() === selectedText.toLowerCase();
+        });
+
+        const priceValue = Number(matchedPlan?.price ?? matchedPlan?.amount ?? 0);
+        return Number.isFinite(priceValue) && priceValue > 0 ? priceValue : basePrice;
+    };
+
+    const calculateBookingTotal = () => {
+        if (!finalBookingPriceEl || !finalBookingMetaEl || !finalBookingServiceLabelEl || !priceValueEl) {
+            return;
+        }
+
+        const serviceType = getSelectedServiceType();
+        const selectedPrice = getSelectedPlanPrice();
+
+        priceValueEl.innerHTML = `OMR ${new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(selectedPrice)}`;
+
+        finalBookingPriceEl.textContent = new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(selectedPrice);
+
+        finalBookingServiceLabelEl.textContent = serviceType;
+        finalBookingMetaEl.textContent = `${getUnitLabel(serviceType)} rate`;
+    };
+
+    const updatePriceUnit = () => {
+        if (!serviceSelect || !priceUnitEl) {
+            return;
+        }
+
+        const serviceType = getSelectedServiceType();
+        priceUnitEl.textContent = getUnitLabel(serviceType);
+        calculateBookingTotal();
+    };
+
+    if (serviceSelect) {
+        serviceSelect.addEventListener('change', updatePriceUnit);
+        updatePriceUnit();
+    }
+
     const locationSearchUrl = "{{ route('locations.search') }}";
     const searchInputs = document.querySelectorAll('.location-search');
 

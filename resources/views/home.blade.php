@@ -161,15 +161,14 @@
                     $serviceIcon = ['✦', '◈', '◇', '✦', '◉', '◎'][$index % 6];
                 @endphp
 
-                <article
-                    class="service-hover-card group relative {{ $isFeatured ? 'min-h-[250px] sm:col-span-2' : 'min-h-[200px]' }} cursor-pointer overflow-hidden rounded-[15px] border border-[#181818] bg-[#090909]"
-                    data-service-modal
-                    data-title="{{ $serviceData['title'] }}"
-                    data-image="{{ $serviceData['image'] }}"
-                    data-summary="{{ $serviceData['summary'] }}"
-                    data-description="{{ $serviceData['description'] }}"
-                    data-pricing='@json($serviceData['pricing'])'
-                    tabindex="0"
+                @php
+                    $serviceSlug = $service->slug ?? (is_array($service) ? ($service['slug'] ?? Str::slug($serviceData['title'])) : Str::slug($serviceData['title']));
+                    $serviceLink = route('service.details', $serviceSlug);
+                @endphp
+
+                <a
+                    href="{{ $serviceLink }}"
+                    class="service-hover-card group relative {{ $isFeatured ? 'min-h-[250px] sm:col-span-2' : 'min-h-[200px]' }} block overflow-hidden rounded-[15px] border border-[#181818] bg-[#090909]"
                     aria-label="View details for {{ $serviceData['title'] }}"
                 >
                     @if ($serviceData['image'])
@@ -218,32 +217,11 @@
                             </p>
                         </div>
                     </div>
-                </article>
+                </a>
             @endforeach
         </div>
     </div>
 
-    <div id="serviceModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-modal="true" role="dialog">
-        <div class="fixed inset-0 bg-black/80 backdrop-blur-sm" data-close-service-modal></div>
-
-        <div class="relative mx-auto flex min-h-full items-center justify-center p-4 sm:p-6">
-            <div class="relative w-full max-w-2xl overflow-hidden rounded-[24px] border border-[#d9b33f]/20 bg-[#111111] shadow-2xl">
-                <button type="button" data-close-service-modal class="absolute right-4 top-4 z-20 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs text-white/80 transition hover:border-[#d9b33f] hover:text-[#d9b33f]" aria-label="Close service details">
-                    Close
-                </button>
-
-                <img id="serviceModalImage" src="" alt="" class="h-56 w-full object-cover">
-
-                <div class="p-6 sm:p-8">
-                    <p class="text-[9px] font-bold uppercase tracking-[0.3em] text-[#d9b33f]">Private Chauffeur Service</p>
-                    <h3 id="serviceModalTitle" class="mt-3 font-serif text-3xl text-white"></h3>
-                    <p id="serviceModalDescription" class="mt-4 text-sm leading-7 text-white/70"></p>
-
-                    <div id="serviceModalPricing" class="mt-6 space-y-3"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
 
     {{-- =========================
@@ -356,7 +334,7 @@
                     <p class="text-[10px] font-bold uppercase tracking-[0.35em] text-[#ffffff]">Our Fleet</p>
                     <h2 class="mt-4 font-serif text-4xl sm:text-6xl">Vehicles That<br><span class="text-[#ffffff]">Command Respect.</span></h2>
                 </div>
-                <a href="#" class="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition hover:text-[#ffffff]">
+                <a href="{{ url('fleet-search') }}" class="text-[10px] font-bold uppercase tracking-[0.25em] text-white/60 transition hover:text-[#ffffff]">
                     View full fleet →
                 </a>
             </div>
@@ -1955,11 +1933,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const mobileMenu = document.getElementById('mobileMenu');
         const returnTripToggle = document.getElementById('return_trip');
         const returnTripFields = document.getElementById('returnTripFields');
-        const serviceModal = document.getElementById('serviceModal');
-        const serviceModalImage = document.getElementById('serviceModalImage');
-        const serviceModalTitle = document.getElementById('serviceModalTitle');
-        const serviceModalDescription = document.getElementById('serviceModalDescription');
-        const serviceModalPricing = document.getElementById('serviceModalPricing');
         const fleetButtons = document.querySelectorAll('.fleet-option-btn');
         const featuredFleetName = document.getElementById('featuredFleetName');
         const featuredFleetPrice = document.getElementById('featuredFleetPrice');
@@ -2076,70 +2049,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         returnTripToggle?.addEventListener('change', syncReturnTripFields);
         syncReturnTripFields();
-
-        const closeServiceModal = () => {
-            if (!serviceModal) return;
-            serviceModal.classList.add('hidden');
-        };
-
-        const openServiceModal = (card) => {
-            if (!serviceModal || !serviceModalImage || !serviceModalTitle || !serviceModalDescription || !serviceModalPricing) {
-                return;
-            }
-
-            const title = card.dataset.title || 'Service';
-            const description = card.dataset.description || 'Luxury private chauffeur service tailored to your schedule.';
-            const image = card.dataset.image || '';
-            const pricing = JSON.parse(card.dataset.pricing || '[]');
-
-            serviceModalTitle.textContent = title;
-            serviceModalDescription.textContent = description;
-            serviceModalImage.src = image;
-            serviceModalImage.alt = title;
-
-            if (pricing.length) {
-                serviceModalPricing.innerHTML = pricing.map(item => `
-                    <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-                        <span class="text-xs uppercase tracking-[0.2em] text-white/60">${item.label || 'Service'}</span>
-                        <span class="font-serif text-xl text-[#d9b33f]">${item.currency || 'OMR'} ${Number(item.amount || 0).toFixed(0)}</span>
-                    </div>
-                `).join('');
-            } else {
-                serviceModalPricing.innerHTML = '<div class="rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-xs uppercase tracking-[0.2em] text-white/60">Custom itinerary available</div>';
-            }
-
-            serviceModal.classList.remove('hidden');
-        };
-
-        document.querySelectorAll('[data-service-modal]').forEach(card => {
-            const trigger = () => openServiceModal(card);
-
-            card.addEventListener('click', trigger);
-            card.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    trigger();
-                }
-            });
-        });
-
-        document.querySelectorAll('[data-close-service-modal]').forEach(button => {
-            button.addEventListener('click', closeServiceModal);
-        });
-
-        if (serviceModal) {
-            serviceModal.addEventListener('click', (event) => {
-                if (event.target === serviceModal) {
-                    closeServiceModal();
-                }
-            });
-        }
-
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && serviceModal && !serviceModal.classList.contains('hidden')) {
-                closeServiceModal();
-            }
-        });
 
         document.querySelectorAll('.faq-button').forEach(button => {
             button.addEventListener('click', () => {

@@ -43,6 +43,7 @@ Route::get('/', function () {
 })->name('home');
 Route::get('/blog/{blog:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 Route::get('/fleet-search', [FrontController::class, 'fleet_search'])->name('fleet.search');
+Route::get('/service/{service:slug}', [FrontController::class, 'service_details'])->name('service.details');
 Route::get('/fleet-details/{fleet:slug}', [FrontController::class, 'fleet_details'])->name('fleet.details');
 Route::get('/contact-us', function () {
     return view('contact-us');
