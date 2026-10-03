@@ -27,7 +27,7 @@ use App\Http\Controllers\FrontController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    $services = Service::query()->orderBy('title')->get();
+    $services = Service::query()->orderBy('sequence_order','asc')->get();
     $featuredFleets = Fleet::query()
         ->with(['amenityFleet.amenity'])
         ->orderByDesc('created_at')

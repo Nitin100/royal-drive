@@ -140,7 +140,7 @@
         @endphp
 
         <div class="grid grid-cols-1 gap-[10px] sm:grid-cols-2 lg:grid-cols-3 pt-10">
-            @foreach ($homepageServices->take(6) as $index => $service)
+            @foreach ($homepageServices->take(8) as $index => $service)
                 @php
                     $serviceData = is_object($service) ? [
                         'title' => $service->title,

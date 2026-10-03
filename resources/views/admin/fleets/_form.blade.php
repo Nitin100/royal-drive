@@ -1,6 +1,9 @@
 @php
     $isEdit = isset($fleet);
     $serviceOptions = $serviceOptions ?? \App\Models\Service::query()->orderBy('title')->pluck('title', 'id')->all();
+    $serviceTypeMap = \App\Models\Service::query()->orderBy('title')->pluck('service_type', 'id')->all();
+    $serviceTitleMap = \App\Models\Service::query()->orderBy('title')->pluck('id', 'title')->all();
+    $serviceTypeByTitle = \App\Models\Service::query()->orderBy('title')->pluck('service_type', 'title')->all();
     $pricingPlans = old('pricing_config')
         ? json_decode(old('pricing_config'), true)
         : (@$fleet?->pricing_config ?? []);
@@ -15,7 +18,7 @@
     ];
 @endphp
 
-<div class="space-y-6" x-data="fleetPricingBuilder(@js($pricingPlans))">
+<div class="space-y-6" x-data="fleetPricingBuilder(@js($pricingPlans), @js($serviceTypeMap), @js($serviceTitleMap), @js($serviceTypeByTitle))">
     <div class="grid gap-6 md:grid-cols-2">
         <div>
             <label for="name" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">Vehicle Name</label>
@@ -155,16 +158,16 @@
                     <div class="grid gap-4 md:grid-cols-3">
                         <div>
                             <label class="mb-1 block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Service</label>
-                            <select x-model="plan.name" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
+                            <select x-model="plan.service_id" @change="plan.name = $event.target.selectedOptions[0]?.text || ''" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
                                 <option value="">Select a service</option>
                                 @foreach ($serviceOptions as $id => $title)
-                                    <option value="{{ $title }}">{{ $title }}</option>
+                                    <option value="{{ $id }}">{{ $title }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div>
                             <label class="mb-1 block text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Price</label>
-                            <input type="text" x-model="plan.price" placeholder="OMR 99 / day" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
+                            <input type="text" x-model="plan.price" x-bind:placeholder="getPricePlaceholder(plan.service_id, plan.name)" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
                         </div>
                         <div class="flex items-end justify-end">
                             <button type="button" class="rounded-lg border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600" @click="removePlan(index)">Remove</button>
@@ -215,15 +218,33 @@
 <script src="https://unpkg.com/trix@2.1.8/dist/trix.umd.min.js"></script>
 
 <script>
-    function fleetPricingBuilder(initialPlans) {
-        const normalizePlan = (plan) => ({
-            name: plan?.name ?? '',
-            price: plan?.price ?? '',
-            featuresText: Array.isArray(plan?.features) ? plan.features.join('\n') : (plan?.featuresText ?? ''),
-        });
+    function fleetPricingBuilder(initialPlans, serviceTypeMap = {}, serviceTitleMap = {}, serviceTypeByTitle = {}) {
+        const normalizePlan = (plan) => {
+            const mappedServiceId = plan?.service_id ?? (plan?.name ? (serviceTitleMap[plan.name] ?? '') : '');
+
+            return {
+                service_id: mappedServiceId,
+                name: plan?.name ?? '',
+                price: plan?.price ?? '',
+                featuresText: Array.isArray(plan?.features) ? plan.features.join('\n') : (plan?.featuresText ?? ''),
+            };
+        };
+
+        const getUnitForType = (serviceType) => {
+            const unitMap = {
+                Daily: 'day',
+                Weekly: 'week',
+                Monthly: 'Month',
+                'Long Lease': 'Lease',
+            };
+
+            return unitMap[serviceType] || 'day';
+        };
 
         return {
             plans: Array.isArray(initialPlans) && initialPlans.length ? initialPlans.map(normalizePlan) : [normalizePlan({})],
+            serviceTypeMap,
+            serviceTypeByTitle,
             addPlan() {
                 this.plans.push(normalizePlan({}));
             },
@@ -232,6 +253,11 @@
                 if (this.plans.length === 0) {
                     this.plans.push(normalizePlan({}));
                 }
+            },
+            getPricePlaceholder(serviceId, serviceName = '') {
+                const serviceType = this.serviceTypeMap[serviceId] || this.serviceTypeByTitle[serviceName] || 'Daily';
+
+                return `OMR 99 / ${getUnitForType(serviceType)}`;
             },
             get serializedPlans() {
                 return JSON.stringify(this.plans.map((plan) => ({

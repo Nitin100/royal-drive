@@ -13,6 +13,7 @@ class Service extends Model
     protected $fillable = [
         'title',
         'slug',
+        'service_type',
         'meta_title',
         'meta_description',
         'banner_image_path',

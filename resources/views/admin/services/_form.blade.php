@@ -34,6 +34,19 @@
         </div>
 
         <div>
+            <label for="service_type" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">Service Type</label>
+            <select id="service_type" required name="service_type" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">
+                <option value="" {{ old('service_type', $service->service_type ?? '') == '' ? 'selected' : '' }}>Select service type</option>
+                <option value="Daily" {{ old('service_type', $service->service_type ?? '') == 'Daily' ? 'selected' : '' }}>Daily</option>
+                <option value="Weekly" {{ old('service_type', $service->service_type ?? '') == 'Weekly' ? 'selected' : '' }}>Weekly</option>
+                <option value="Monthly" {{ old('service_type', $service->service_type ?? '') == 'Monthly' ? 'selected' : '' }}>Monthly</option>
+                <option value="Long Lease" {{ old('service_type', $service->service_type ?? '') == 'Long Lease' ? 'selected' : '' }}>Long Lease</option>
+            </select>
+            @error('service_type')<p class="mt-1 text-sm text-rose-600">{{ $message }}</p>@enderror
+        </div>
+    </div>
+    <div class="">
+        <div>
             <label for="meta_description" class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200">SEO Description</label>
             <textarea id="meta_description" name="meta_description" maxlength="160" rows="3" class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100">{{ old('meta_description', $service->meta_description ?? '') }}</textarea>
             @error('meta_description')<p class="mt-1 text-sm text-rose-600">{{ $message }}</p>@enderror

@@ -101,8 +101,8 @@
                         @endif
 
                         <div class="absolute inset-0 bg-black/40"></div>
-                        <div class="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/20"></div>
-                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div>
+                        <!-- <div class="absolute inset-0 bg-gradient-to-r from-black via-black/75 to-black/20"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30"></div> -->
 
                         <div class="relative z-20 mx-auto flex min-h-[450px] max-w-7xl items-center px-6 pb-0 pt-0 lg:min-h-[560px] lg:px-8">
                             <div class="max-w-3xl">
